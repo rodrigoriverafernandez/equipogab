@@ -34,7 +34,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 INSTALLED_APPS = [
     'jazzmin',
-  
+    'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -185,3 +185,27 @@ JAZZMIN_SETTINGS = {
     'welcome_sign': 'Inicio de Sesion al Administrador del equipo de computo'
     
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {  # root logger
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
+
+# settings.py
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'  # O 'bootstrap3' si estás usando Bootstrap 3
+

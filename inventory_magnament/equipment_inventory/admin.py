@@ -7,7 +7,13 @@ admin.site.site_header= 'Admin. Equip.Gab'
 
 
 class EmpleadoAdmin(admin.ModelAdmin):
-    list_display = ['rpe', 'nombre', 'adscripcion', 'ubicacion', 'email', 'nombramiento']
+    list_display = ['rpe', 'nombre', 'fecha_antiguedad', 'tc',  'numero_plaza', 'clave_categoria', 'descripcion_categoria', 'area_adscripcion']
+
+     # Agregar campos que se pueden buscar
+    search_fields = ('rpe', 'nombre', 'tc', 'clave_categoria', 'descripcion_categoria')
+
+
+
 
 class InventarioEquipoAdmin(admin.ModelAdmin):
     list_display = ['num_serie', 'num_inventario', 'num_activo', 'marca', 'modelo', 'tipo', 'especificaciones', 'fecha_adquisicion', 'estado', 'ip', 'nombre_equipo']

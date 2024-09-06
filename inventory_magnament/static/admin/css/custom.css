@@ -15,7 +15,7 @@
 }
 
 #header img {
-    margin-right: 10px;
+    margin-right: 30px;
 }
 
 /* Personalizar el pie de página */
@@ -34,4 +34,16 @@
 .dashboard-title,
 .module h2 {
     color: #343a40;
+}
+
+
+.navbar-brand .logo {
+    width: 300px; /* Ajusta según necesites */
+    height: auto;
+}
+
+
+.text-center {
+    width: 100%;
+    display: block;
 }

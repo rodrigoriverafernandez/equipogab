@@ -1,74 +1,135 @@
 {% extends 'base.html' %}
+{% block extra_head %}
+<style>
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #ffffff; /* Blanco para filas impares */
+    }
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #e7e7e7; /* Gris claro para filas pares */
+    }
+    .table-hover tbody tr:hover {
+        background-color: #1da31d; /* Verde claro cuando se pasa el mouse */
+    }
+    .table-striped td {
+        padding: 3px 7px; /* Reduce el padding para hacer los renglones más angostos */
+        height: 20px; /* Ajusta esto según tus necesidades */
+    }
+    input[type="text"] {
+        width: 20%; /* Ocupa el 20% del ancho del contenedor */
+        padding: 8px 15px; /* Espacio interno del input */
+        margin: 8px 0; /* Margen exterior del input */
+        display: inline-block; /* El input no ocupa toda la línea */
+        border: 1px solid #ccc; /* Borde sutil */
+        border-radius: 4px; /* Bordes redondeados */
+        box-sizing: border-box; /* El padding y el border no afectan el ancho final */
+    }
+    input[type="text"]:focus {
+        border-color: #04a567; /* Color del borde al enfocar */
+        outline: 0; /* Elimina el contorno predeterminado */
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); /* Sombra sutil al enfocar */
+    }
+    .table-container {
+        width: 100%; /* Asegúrate de que el contenedor ocupe todo el ancho */
+        display: flex; /* Usar flexbox para centrar */
+        justify-content: center; /* Centrar horizontalmente */
+    }
 
-{% block title %}Lista de Empleados{% endblock %}
-{% block page_title %}Lista de Empleados{% endblock %}
+    .table {
+        width: 100%; /* Ajusta el ancho de la tabla según necesidad */
+        table-layout: auto; /* Permite que las columnas se ajusten automáticamente */
+    }
+
+    .table th, .table td {
+        padding: 8px 15px; /* Añade más espacio dentro de las celdas */
+    }
+    
+    /* Permitir que el contenido de las celdas se ajuste en caso de que sea demasiado largo */
+    .table th, .table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+
+{% endblock %}
+
+
+{% block title %}Lista Empleados{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2>Empleados</h2>
-    </div>
-    <form method="GET" action="{% url 'listar_empleados' %}">
-        <div class="form-group">
-            <input type="text" name="q" class="form-control" placeholder="Buscar por nombre o RPE">
+
+<div class="table-container">
+    <div class="row justify-content-center">
+        <div class="col-md-11">
+            <h3>Lista de Empleados GAB</h3>
+            
+            <!-- Formulario de Búsqueda -->
+            <form method="GET" action="{% url 'listar_empleados' %}">
+                <div class="form-group">
+                    <input type="text" name="q" placeholder="Buscar por RPE, nombre, área, plaza o categoría..." value="{{ request.GET.q }}" class="form-control">
+                    <button type="submit" class="btn btn-success mt-2">Buscar</button>
+                </div>
+            </form>
+            
+            <!-- Tabla de Empleados -->
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th>RPE</th>
+                        <th>Nombre</th>
+                        <th>Descripción Categoría</th>
+                        <th>Área Adscripción</th>
+                        <th>Número Plaza</th>
+                       
+                        <th>Clave Area</th>
+                        <th>T.C</th>
+                        <th>Fecha Antiguedad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for empleado in empleados %}
+                    <tr>
+                        <td>
+                            {% if empleado.rpe %}
+                                <a href="{% url 'detalle_empleado' empleado.rpe %}">{{ empleado.rpe }}</a>
+                            {% else %}
+                                Sin RPE
+                            {% endif %}
+                        </td>
+                        <td>{{ empleado.nombre }}</td>
+                        <td>{{ empleado.descripcion_categoria }}</td>
+                        <td>{{ empleado.area_adscripcion }}</td>
+                        <td>{{ empleado.numero_plaza }}</td>
+                        
+                        <td>{{ empleado.clave_area }}</td>
+                        <td>{{ empleado.tc }}</td>
+                        <td>{{ empleado.fecha_antiguedad }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Paginación -->
+            <div class="pagination">
+                {% if empleados.has_previous %}
+                    <a href="?page=1">&laquo; primera</a> &nbsp;
+                    <a href="?page={{ empleados.previous_page_number }}">previa</a>
+                {% endif %}
+
+                <span class="current">
+                    Página {{ empleados.number }} de {{ empleados.paginator.num_pages }}.
+                </span>
+
+                {% if empleados.has_next %}
+                    <a href="?page={{ empleados.next_page_number }}">siguiente</a> &nbsp;
+                    <a href="?page={{ empleados.paginator.num_pages }}">última &raquo;</a>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'home' %}" class="btn btn-primary mt-3">Regresar al Menú Principal</a>
         </div>
-        <button type="submit" class="btn btn-primary">Buscar</button>
-    </form>
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th>RPE</th>
-                <th>Nombre</th>
-                <th>Adscripción</th>
-                <th>Ubicación</th>
-                <th>Email</th>
-                <th>Nombramiento</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for empleado in empleados %}
-            <tr>
-                <td>
-                    {% if empleado.rpe %}
-                        <a href="{% url 'detalle_empleado' empleado.rpe %}">{{ empleado.rpe }}</a>
-                    {% else %}
-                        Sin RPE
-                    {% endif %}
-                </td>
-                <td>{{ empleado.nombre }}</td>
-                <td>{{ empleado.adscripcion }}</td>
-                <td>{{ empleado.ubicacion }}</td>
-                <td>{{ empleado.email }}</td>
-                <td>{{ empleado.nombramiento }}</td>
-                <td>
-                    {% if empleado.rpe %}
-                        <a href="{% url 'detalle_empleado' empleado.rpe %}" class="btn btn-info btn-sm">Ver</a>
-                    {% else %}
-                        <span class="text-muted">No disponible</span>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div class="pagination">
-        <span class="step-links">
-            {% if empleados.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ empleados.previous_page_number }}">previous</a>
-            {% endif %}
-
-            <span class="current">
-                Page {{ empleados.number }} of {{ empleados.paginator.num_pages }}.
-            </span>
-
-            {% if empleados.has_next %}
-                <a href="?page={{ empleados.next_page_number }}">next</a>
-                <a href="?page={{ empleados.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
     </div>
-    <a href="{% url 'home' %}" class="btn btn-primary mt-3">Regresar al Menú Principal</a>
 </div>
+
 {% endblock %}

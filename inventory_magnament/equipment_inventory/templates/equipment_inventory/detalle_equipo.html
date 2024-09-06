@@ -56,15 +56,30 @@
                 <tr>
                     <th>Asignado a</th>
                     <td>
-                        {% if asignacion %}
-                            {{ asignacion.empleado.nombre }} (RPE: {{ asignacion.empleado.rpe }})
+                        {% if asignado %}
+                            {{ asignado.empleado.nombre }} (RPE: {{ asignado.empleado.rpe }})
+                           
                         {% else %}
                             No asignado
                         {% endif %}
                     </td>
                 </tr>
             </table>
-            <a href="{% url 'home' %}" class="btn btn-primary mt-3">Regresar al Menú Principal</a>
+
+            {% if messages %}
+    <div>
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+              
+               
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="{% url 'crear_asignacion' equipo.id %}" class="btn btn-success">Asignar Equipo a Empleado</a>
+                <a href="{% url 'home' %}" class="btn btn-primary" style="margin-left: 10px;">Regresar al Menú Principal</a>
+            </div>
+          
         </div>
     </div>
 </div>

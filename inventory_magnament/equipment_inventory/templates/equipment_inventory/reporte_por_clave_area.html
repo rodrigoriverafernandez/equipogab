@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Reporte por Clave de Área{% endblock %}
+{% block extra_head %}
+<style>
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container-fluid {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .row {
+        flex: 1;
+    }
+
+    .table-responsive {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .table {
+        flex-grow: 1;
+        width: 100%;
+        table-layout: auto;
+    }
+
+    .table th, .table td {
+        padding: 5px 10px; /* Reduce el espacio interno de las celdas */
+        font-size: 14px; /* Reduce el tamaño de la letra */
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+        vertical-align: middle;
+        white-space: normal;
+        word-wrap: break-word;
+        height: 30px; /* Reduce la altura de las celdas */
+    }
+
+    .table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #ffffff;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .table-bordered {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #ddd;
+    }
+
+    .table-subtotal, .table-total {
+        background-color: #158d0a;
+        font-weight: bold;
+        text-align: right;
+        color: #e4ece6;
+    }
+
+    .table-total {
+        background-color: #03072eef;
+        color: #e4ece6;
+    }
+
+    .table-total td {
+        color: #ff4500; /* Cambia el color de las cifras del total general */
+    }
+</style>
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3>Reporte de Empleados por Clave de Área</h3>
+
+    <!-- Formulario de búsqueda -->
+    <form method="GET" action="{% url 'reporte_por_clave_area' %}">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <input type="text" class="form-control" name="q" placeholder="Buscar por clave de área, RPE o nombre" value="{{ query }}">
+            </div>
+            <div class="form-group col-md-2">
+                <input type="number" class="form-control" name="antiguedad" placeholder="Años de antigüedad" value="{{ antiguedad_filtro }}">
+            </div>
+            <div class="form-group col-md-2">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Clave.Área</th>
+                    <th>RPE</th>
+                    <th>Nombre</th>
+                    <th>Desc.Categoría</th>
+                    <th>Núm.Plaza</th>
+                    <th>Clave.Categ.</th>
+                    <th>Descripcion.Área</th>
+                    <th>Tipo.Contrato</th>
+                    <th>Antigüedad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for area in empleados_por_area %}
+                <tr>
+                    <td colspan="2" class="table-subtotal">Área: {{ area.clave_area }}</td>
+                </tr>
+                {% for empleado in empleados %}
+                    {% if empleado.clave_area == area.clave_area %}
+                    <tr>
+                        <td>{{ empleado.clave_area }}</td>
+                        <td>{{ empleado.rpe }}</td>
+                        <td>{{ empleado.nombre }}</td>
+                        <td>{{ empleado.descripcion_categoria }}</td>
+                        <td>{{ empleado.numero_plaza }}</td>
+                        <td>{{ empleado.clave_categoria }}</td>
+                        <td>{{ empleado.descripcion_area_t }}</td>
+                        <td>
+                            {% if empleado.tc == '1' %}
+                                Confianza
+                            {% elif empleado.tc == '6' %}
+                                Base
+                            {% else %}
+                                {{ empleado.tc }}
+                            {% endif %}
+                        </td>
+                        <td>{{ empleado.anios_antiguedad }} años, {{ empleado.meses_antiguedad }} meses, {{ empleado.dias_antiguedad }} días</td>
+                    </tr>
+                    {% endif %}
+                {% endfor %}
+                <tr>
+                    <td colspan="9" class="table-subtotal">Total en {{ area.clave_area }}: {{ area.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="table-total">Total General: {{ total_general }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+{% endblock %}

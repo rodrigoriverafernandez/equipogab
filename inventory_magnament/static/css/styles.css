@@ -11,9 +11,9 @@ body {
 }
 
 .navbar-brand img {
-    margin-right: 10px;
-    width: 50px; /* Ajusta el ancho del logo */
-    height: 50px; /* Ajusta la altura del logo */
+    margin-right: 30px;
+    width: 80px; /* Ajusta el ancho del logo */
+    height: 80px; /* Ajusta la altura del logo */
 }
 
 .navbar-brand .d-inline-block.align-middle {
@@ -23,7 +23,7 @@ body {
 
 .navbar-brand .subtitles {
     font-size: 0.8rem;
-    color: #cccccc;
+    color: #ffffff;
 }
 
 .navbar-nav .nav-item .nav-link {
@@ -32,11 +32,11 @@ body {
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-    color: #cccccc;
+    color: #ffffff;
 }
 
 footer {
-    background-color: #343a40;
+    background-color: #128646;
     color: #ffffff;
     padding: 20px 0;
 }
@@ -51,4 +51,58 @@ h1 {
     width: 800px;
     height: 200PX;
     object-fit: cover; /* Opcional: para ajustar la imagen dentro del contenedor */
+}
+
+
+.text-center {
+    width: 100%;
+    display: block;
+}
+.carousel-caption h5 {
+    color: #f1f1f1c2; /* Cambia esto al color que prefieras para el título */
+}
+
+.carousel-caption p {
+    color: #000704; /* Cambia esto al color que prefieras para la descripción */
+}
+
+
+.ui-datepicker {
+    z-index: 1000 !important; /* Asegura que el calendario esté sobre otros elementos */
+    position: absolute; /* Opcional, dependiendo de cómo necesites ajustarlo */
+}
+
+.ui-datepicker {
+    top: 400px !important; /* Ajusta según tus necesidades */
+    left: 70px !important;  /* Ajusta según tus necesidades */
+}
+
+
+.custom-navbar {
+    margin-left: 0; /* Elimina el margen izquierdo si es necesario */
+    margin-right: 0; /* Elimina el margen derecho si es necesario */
+}
+
+
+.negrita-color {
+    font-weight: bold;
+    color: #333; /* Cambia el color a tu preferencia */
+}
+
+.table {
+    width: 100%; /* La tabla ocupará el 100% del contenedor padre */
+    table-layout: fixed; /* Mantiene un ancho fijo para las columnas */
+}
+
+.table th, .table td {
+    white-space: nowrap; /* Evita que el texto se envuelva */
+    overflow: hidden; /* Oculta el texto desbordado */
+    text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto es demasiado largo */
+}
+
+.carousel-inner img {
+    max-width: 100%; /* El ancho máximo será del 100% del contenedor */
+    max-height: 475px; /* Limita la altura máxima a 400px (ajusta según necesidad) */
+    object-fit: contain; /* Mantiene la proporción sin recortar la imagen */
+    margin: 0 auto; /* Centra la imagen en el carrusel */
 }

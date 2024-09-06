@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Empleados en Área {{ clave_area }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Empleados en el Área: {{ clave_area }}</h2>
+    
+    <!-- Formulario de Búsqueda -->
+    <form method="GET" action="{% url 'listar_empleados_por_area' clave_area %}">
+        <div class="form-group">
+            <input type="text" name="q" placeholder="Buscar por nombre o RPE..." value="{{ request.GET.q }}" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+    
+    <!-- Tabla de Resultados -->
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th>RPE</th>
+                <th>Nombre</th>
+                <th>Descripción Categoría</th>
+                <th>Área Adscripción</th>
+                <th>Número Plaza</th>
+                <th>Clave Categoría</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for empleado in empleados %}
+            <tr>
+                <td>{{ empleado.rpe }}</td>
+                <td>{{ empleado.nombre }}</td>
+                <td>{{ empleado.descripcion_categoria }}</td>
+                <td>{{ empleado.area_adscripcion }}</td>
+                <td>{{ empleado.numero_plaza }}</td>
+                <td>{{ empleado.clave_categoria }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

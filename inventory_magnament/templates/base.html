@@ -3,52 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Inventory Management{% endblock %}</title>
+    <title>{% block title %}Inventory GAB{% endblock %}</title>
     {% load static %}
-    <link rel="icon" type="image/x-icon" href="{% static 'admin/img/favicon.ico' %}">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     {% block extra_head %}{% endblock %}
     <style>
-        .navbar-nav .logout-form {
-            display: inline;
+        .navbar-custom {
+            background-color: #13832d; /* Fondo verde */
         }
-        .navbar-nav .logout-form .nav-link {
-            padding: 0.5rem 1rem;
-            color: #fff;
+
+        .navbar-custom .navbar-nav .nav-link,
+        .navbar-custom .navbar-brand {
+            color: white; /* Texto blanco */
         }
-        .navbar-nav .logout-form .nav-link:hover {
-            color: #ccc;
+
+        .navbar-custom .navbar-nav .nav-link:hover {
+            color: #161b68; /* Color de texto al pasar el ratón */
         }
-        .navbar-brand .logo {
-            float: left;
-            margin-right: 10px;
-        }
-        .navbar-brand .brand-text {
-            float: left;
-        }
+
         .navbar-brand {
             display: flex;
             align-items: center;
         }
-        .dropdown-menu {
-            background-color: #343a40;
+
+        .navbar-brand img.logo {
+            margin-right: 70px; /* Espacio entre el logo y el texto */
+            height: 70px; /* Ajusta la altura del logo según sea necesario */
         }
-        .dropdown-item {
-            color: #fff !important;
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        .dropdown-item:hover {
-            color: #343a40 !important;
-            background-color: #fff !important;
+
+        .brand-text .title {
+            font-size: 0.90em;
+            font-weight: bold;
+        }
+
+        .brand-text .subtitles {
+            font-size: 0.9em;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-custom" style="max-width: 95%; margin: 0 auto;">
         <a class="navbar-brand" href="{% url 'homepage' %}">
-            <img src="{% static 'admin/img/logo2.png' %}" alt="Logo" width="50" height="50" class="d-inline-block align-top logo">
-            <div class="d-inline-block align-middle brand-text">
-                <div>Inventory Management</div>
+            <img src="{% static 'admin/img/logo2.png' %}" alt="Logo" class="d-inline-block align-top logo">
+            <div class="brand-text">
+                <div class="title">Administración del Inventario de Cómputo</div>
                 <div class="subtitles">Gerencia de Abastecimientos</div>
                 <div class="subtitles">Auxiliaria General</div>
             </div>
@@ -58,26 +64,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'listar_empleados' %}">Empleados</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'listar_equipos' %}">Inventario</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'listar_asignaciones' %}">Asignaciones</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="accionesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Acciones
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="accionesDropdown">
-                        <a class="dropdown-item" href="{% url 'crear_empleado' %}">Agregar Empleado</a>
-                        <a class="dropdown-item" href="{% url 'upload_empleados' %}">Subir Empleados CSV</a>
-                        <a class="dropdown-item" href="{% url 'upload_equipos' %}">Subir Equipos CSV</a>
-                    </div>
-                </li>
                 {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link saludo-usuario">Hola, {{ user.get_full_name }}</span>
+                    </li>
+                    {% if user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'admin:index' %}">Administración</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}" class="logout-form">
                             {% csrf_token %}
@@ -89,17 +84,41 @@
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
                 {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'listar_equipos' %}">Inventario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'reporte_por_clave_area' %}">Rep.Clave Area</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="accionesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Acciones
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="accionesDropdown">
+                        <a class="dropdown-item" href="{% url 'listar_empleados' %}">Listar Empleados</a>
+                        <a class="dropdown-item" href="{% url 'listar_equipos' %}">Listar Equipos</a>
+                        <a class="dropdown-item" href="{% url 'listar_asignaciones' %}">Listar Asignaciones</a>
+                        <a class="dropdown-item" href="{% url 'upload_empleados' %}">Subir Empleados CSV</a>
+                        <a class="dropdown-item" href="{% url 'upload_equipos' %}">Subir Equipos CSV</a>
+                    </div>
+                </li>
             </ul>
+            <form class="form-inline my-2 my-lg-0" method="GET" action="{% url 'listar_empleados' %}">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar..." aria-label="Buscar" name="q" value="{{ request.GET.q }}">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Buscar</button>
+            </form>
         </div>
     </nav>
+    
+
     <div class="container mt-5">
         <div class="text-center mb-4">
-            <h1>{% block page_title %}Inventory Management{% endblock %}</h1>
+            {% block page_title %}{% endblock %}
         </div>
         {% block content %}{% endblock %}
     </div>
     <footer class="bg-dark text-white mt-5 p-4 text-center">
-        <p>&copy; 2024 Inventory Management. Todos los derechos reservados.</p>
+        <p>&copy; 2024 Inventory Management. Todos los derechos reservados Soporte Tecnico GAB.</p>
     </footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

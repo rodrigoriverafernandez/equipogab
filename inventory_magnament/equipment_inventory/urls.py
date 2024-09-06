@@ -17,4 +17,10 @@ urlpatterns = [
     path('upload/equipos/', views.upload_equipos, name='upload_equipos'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+  
+    path('equipo/asignar/<int:equipo_id>/', views.crear_asignacion, name='crear_asignacion'),
+
+    path('empleados/area/<str:clave_area>/', views.listar_empleados_por_area, name='listar_empleados_por_area'),
+    path('equipos/<str:num_serie>/', views.detalle_equipo, name='detalle_equipo'),  # Asegúrate de que esto coincida con lo que necesitas
+    path('reporte/clave-area/', views.reporte_por_clave_area, name='reporte_por_clave_area'),
 ]
